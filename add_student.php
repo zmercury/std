@@ -104,7 +104,7 @@ if (isset($_SESSION['login_user'])) {
                     <div class="toggle-switch">
                         <span class="switch"></span>
                     </div>
-                </li>
+                </li>   
                 
             </div>
         </div>
