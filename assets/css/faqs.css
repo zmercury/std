@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=Open+Sans:wght@300&display=swap');
+
+:root {
+    --primary: #edf2f4;
+    --secondary: #ced4da;
+    --nav: #dee2ff;
+    --main-white: #fff;
+    --text-black: #000;
+
+    --main-font: 'Nunito', sans-serif;
+    --main-font-sans: 'Open Sans', sans-serif;
+}
+
+*, body, html {
+    margin: 0;
+    padding: 0;
+
+    background-color: var(--main-white);
+    font-family: var(--main-font);
+    color: var(--text-black);
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.navContainer {
+    width: 100%;
+    /* min-width: 1366px; */
+    height: 4em;
+    min-height: 4em;
+
+    display: flex;
+
+}
+
+.flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: row;
+}
+
+.flexLeft {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+    flex-direction: row;
+}
+
+.leftNav {    
+    flex: 1;
+    padding: 0 0 0 4em;
+}
+
+.rightNav {
+    flex: 1;
+    padding: 0 5em 0 0;
+
+    display: flex;
+    justify-content: right;
+    gap: 2.5em;
+}
+
+.rightNav > a {
+    text-decoration: none;
+    color: var(--textBlack);
+    font-weight: bold;
+}
+
+.mainContainer {
+    width: 100%;
+    height: fit-content;
+
+    color: var(--main-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.innerMainContainer {
+    min-width: 1100px;
+    max-width: 1100px;
+
+    margin-top: 2em;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: start;
+}
+
+.innerMainContainer > h1 {
+    margin-bottom: 1em;
+}
+
+.accordion {
+    max-width: 90%;
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+}
+    
+.accordion-header {
+    padding: 10px 10px;
+    cursor: pointer;
+    
+    display: flex;
+    gap: 8px;
+}
+    
+.accordion-content {
+    display: none;
+    padding: 5px 10px 5px 50px;
+}
+
+.hidden{
+    display: none;
+}
