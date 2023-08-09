@@ -7,6 +7,18 @@
     --main-white: #fff;
     --text-black: #000;
 
+    --body-color: #18191a;
+    --sidebar-color: #242526;
+    --primary-color: #3a3b3c;
+    --primary-color-light: #3a3b3c;
+    --toggle-color: #fff;
+    --text-color: #ccc;
+    --text-color-dim: #cccccc70;
+    --selected-color: #313b3c;
+    --error-text: #eee;
+    --error-border: #b70006;
+    --error-background: #b70006;
+
     --main-font: 'Nunito', sans-serif;
     --main-font-sans: 'Open Sans', sans-serif;
 }
@@ -15,9 +27,9 @@
     margin: 0;
     padding: 0;
 
-    background-color: var(--main-white);
+    background-color: var(--body-color);
     font-family: var(--main-font);
-    color: var(--text-black);
+    color: var(--text-color);
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -78,7 +90,7 @@
     width: 100%;
     height: fit-content;
 
-    color: var(--main-white);
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -118,7 +130,7 @@
 .hr-lines {
     margin-bottom: 1.6em;
 
-    background-color: #00000020;
+    background-color: var(--text-color-dim);
     height: 1px;
     border: 0;
 }
@@ -131,7 +143,7 @@
 
 .form-signup > input {
     width: 97%;
-    border: 1px solid #00000050;
+    border: 1px solid var(--text-color);
     height: 2.4em;
     border-radius: 6px;
     padding: 0 0 0 3%;
@@ -140,7 +152,7 @@
 
 .form-signup > button {
     width: 100%;
-    border: 1px solid #00000050;
+    border: 1px solid var(--text-color);
     border-radius: 7px;
     height: 2.9em;
     background-color: #705af8;
@@ -156,11 +168,11 @@
 #role {
     width: 100%;
     height: 2.6em;
-    border: 1px solid #00000050;
+    border: 1px solid var(--text-color);
     border-radius: 7px;
     padding: 0 0 0 2%;
     margin: .5em 0; 
-    color: #00000080;
+    color: var(--text-color-dim);
 }
 
 .leftInnerContainer > span > a {
@@ -183,12 +195,12 @@
 }
 
 #error-message {
-    background-color: #ffcccc; /* Background color for the error message */
-    color: #d8000c; /* Text color */
-    padding: 10px; /* Padding around the message */
-    border: 1px solid #b70006; /* Border style */
-    border-radius: 5px; /* Rounded corners */
-    margin: 10px 0; /* Margin around the message */
+    background-color: var(--error-background); 
+    color: var(--error-text); 
+    padding: 10px; 
+    border: 1px solid var(--error-border); 
+    border-radius: 5px; 
+    margin: 10px 0; 
     font-size: 14px;
 }
 

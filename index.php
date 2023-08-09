@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="./assets/images/planet.png">
     <link rel="stylesheet" href="./assets/css/main.css">
     <script src="./assets/scripts/main.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/scrollbar.css">
+    <link rel="icon" type="image/x-icon" href="./assets/images/planet.png">
     <title>Home - SMS</title>
 </head>
 <body>

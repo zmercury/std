@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./assets/css/faqs.css">
     <script src="./assets/scripts/faqs.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/scrollbar.css">
     <title>FAQs - SMS</title>
 </head>
 <body>

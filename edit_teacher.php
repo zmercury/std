@@ -15,7 +15,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./assets/css/scrollbar.css">
     <link rel="icon" type="image/x-icon" href="./assets/images/planet.png">
-    <title>Add Teacher - SMS</title>
+    <title>Edit Teacher - SMS</title>
     
 </head>
 <body>
@@ -125,8 +125,38 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                 
             </div>
         </div>
-
     </nav>
+
+    <?php
+        // edit_teacher.php
+        require_once("./components/connection.php");
+
+        if (isset($_GET['teacher_id'])) {
+            $teacher_id = $_GET['teacher_id'];
+
+            $query = "SELECT * FROM teachers WHERE uid=$teacher_id"; 
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_num_rows($result) > 0) { 
+                $teacher_data = mysqli_fetch_assoc($result);
+
+                $teachersrealid = $teacher_data['teachersid'];
+                $subject = $teacher_data['subject'];
+                $firstname = $teacher_data['fname'];
+                $lastname = $teacher_data['lname'];
+                $email = $teacher_data['email'];
+                $dob = $teacher_data['dob'];
+                $phonenumber = $teacher_data['phone'];
+            } else {
+                header("location:./add_teacher.php");
+                exit();
+            }
+        } else {
+            header("location:./teacher.php");
+            exit();
+        }
+    ?>
+
 
     <section class="home">
         <div class="text">Hello <?php echo ucwords($_SESSION['login_user']) ?>👋</div>
@@ -136,23 +166,24 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
         ?>
         <div class="text">
             <div class="add-student-container">
-                <h2 style="font-size: 25px;">Add Teachers</h2>
-                <form action="./components/add_teachers_data.php" method="POST" class="addstudent">
+                <h2 style="font-size: 25px;">Edit Teachers</h2>
+                <form action="./components/edit_teacher_data.php" method="POST" class="addstudent">
+                    <input type="hidden" name="teacher_id" value="<?php echo $teacher_id; ?>">
                     <label for="teachersid">Teachers ID</label><br>
-                    <input type="number" name="teachersid" placeholder="Teacher's ID" id="teachersid"></input><br>
+                    <input type="number" name="teachersid" value="<?php echo $teachersrealid; ?>" placeholder="Teacher's ID" id="teachersid"></input><br>
                     <label for="subject">Subject</label><br>
-                    <input type="text" name="subject" placeholder="Subject" id="subject"></input><br>
+                    <input type="text" name="subject" value="<?php echo $subject; ?>" placeholder="Subject" id="subject"></input><br>
                     <label for="firstname">Firstname</label><br>
-                    <input type="text" name="firstname" placeholder="Firstname" id="firstname"></input><br>
+                    <input type="text" name="firstname" value="<?php echo $firstname; ?>" placeholder="Firstname" id="firstname"></input><br>
                     <label for="lastname">Lastname</label><br>
-                    <input type="text" name="lastname" placeholder="Lastname" id="lastname"></input><br>
+                    <input type="text" name="lastname" value="<?php echo $lastname; ?>" placeholder="Lastname" id="lastname"></input><br>
                     <label for="email">Email</label><br>
-                    <input type="email" name="email" placeholder="company@name.com" id="email"></input><br>
+                    <input type="email" name="email" value="<?php echo $email; ?>" placeholder="company@name.com" id="email"></input><br>
                     <label for="dob">Date of Birth</label><br>
-                    <input type="date" name="dob" placeholder="DOB" id="dob"></input><br>
+                    <input type="date" name="dob" value="<?php echo $dob; ?>" placeholder="DOB" id="dob"></input><br>
                     <label for="phonenumber">Phone Number</label><br>
-                    <input type="number" name="phonenumber" placeholder="Phone Number" id="phonenumber"></input><br><br>
-                    <button type="submit" name="submit">Add Student</button>
+                    <input type="number" name="phonenumber" value="<?php echo $phonenumber; ?>" placeholder="Phone Number" id="phonenumber"></input><br><br>
+                    <button type="submit" name="submit">Update Teacher</button>
                 </form>
             </div>
         </div>

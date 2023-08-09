@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['login_user'])) {
-    if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
+if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
+    if ((time() - $_SESSION['last_login_timestamp']) > 12000) {
         header("location:index.php");
     } else {
 ?>
@@ -13,6 +13,9 @@ if (isset($_SESSION['login_user'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/dashboard.css">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./assets/css/scrollbar.css">
+    <link rel="icon" type="image/x-icon" href="./assets/images/planet.png">
+    <title>Add Student - SMS</title>
     
 </head>
 <body>
@@ -24,8 +27,8 @@ if (isset($_SESSION['login_user'])) {
                 </span>
 
                 <div class="text logo-text">
-                    <span class="name">Nikhil Bastola</span>
-                    <span class="profession">Admin</span>
+                    <span class="name"><?php echo ucwords($_SESSION['login_user']); ?></span>
+                    <span class="profession"><?php echo ucwords($_SESSION['role']); ?></span>
                 </div>
             </div>
 
@@ -77,9 +80,23 @@ if (isset($_SESSION['login_user'])) {
                     </li>
 
                     <li class="nav-link">
-                        <a href="./attendance.php">
+                        <a href="./schedule.php">
+                            <i class='bx bx-calendar icon' ></i>
+                            <span class="text nav-text">Schedule</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="./assignment.php">
                             <i class='bx bx-book-content icon' ></i>
-                            <span class="text nav-text">Attendance</span>
+                            <span class="text nav-text">Assignment</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="./add_notice.php">
+                            <i class='bx bx-notification icon'></i>
+                            <span class="text nav-text">Notice</span>
                         </a>
                     </li>
 
@@ -88,7 +105,7 @@ if (isset($_SESSION['login_user'])) {
 
             <div class="bottom-content">
                 <li class="">
-                    <a href="#">
+                    <a href="./components/logout.php?Logout">
                         <i class='bx bx-log-out icon' ></i>
                         <span class="text nav-text">Logout</span>
                     </a>
@@ -112,7 +129,39 @@ if (isset($_SESSION['login_user'])) {
     </nav>
 
     <section class="home">
-        <div class="text">Hello <?php echo ucwords($_SESSION['login_user']) ?>👋!</div>
+        <div class="text">Hello <?php echo ucwords($_SESSION['login_user']) ?>👋</div>
+
+        <?php 
+            if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'teacher') {
+        ?>
+        <div class="text">
+            <div class="add-student-container">
+                <h2 style="font-size: 25px;">Add Students</h2>
+                <form action="./components/add_student_data.php" method="POST" class="addstudent">
+                    <label for="symbolnumber">Symbol Number</label><br>
+                    <input type="number" name="symbolnumber" placeholder="Symbol Number" id="symbolnumber"></input><br>
+                    <label for="firstname">Firstname</label><br>
+                    <input type="text" name="firstname" placeholder="Firstname" id="firstname"></input><br>
+                    <label for="lastname">Lastname</label><br>
+                    <input type="text" name="lastname" placeholder="Lastname" id="lastname"></input><br>
+                    <label for="email">Email</label><br>
+                    <input type="email" name="email" placeholder="company@name.com" id="email"></input><br>
+                    <label for="dob">Date of Birth</label><br>
+                    <input type="date" name="dob" placeholder="DOB" id="dob"></input><br>
+                    <label for="phonenumber">Phone Number</label><br>
+                    <input type="number" name="phonenumber" placeholder="Phone Number" id="phonenumber"></input><br><br>
+                    <button type="submit" name="submit">Add Student</button>
+                </form>
+            </div>
+        </div>
+        <?php 
+            } else {
+        ?>
+        <div class="text">
+            <span id="permission-text">⛔ Only Admin and Teacher can access this page!</span>
+        </div>
+        <?php } ?>
+                
     </section>
 
     <script src="./assets/scripts/dashboard.js"></script>

@@ -15,7 +15,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./assets/css/scrollbar.css">
     <link rel="icon" type="image/x-icon" href="./assets/images/planet.png">
-    <title>Add Teacher - SMS</title>
+    <title>Edit Student - SMS</title>
     
 </head>
 <body>
@@ -58,7 +58,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                         </a>
                     </li>
                     
-                    <li class="nav-link">
+                    <li class="nav-link selected">
                         <a href="./add_student.php">
                             <i class='bx bx-user-plus icon' ></i>
                             <span class="text nav-text">Add Students</span>
@@ -72,7 +72,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                         </a>
                     </li>
 
-                    <li class="nav-link selected">
+                    <li class="nav-link">
                         <a href="./add_teacher.php">
                             <i class='bx bx-user-plus icon' ></i>
                             <span class="text nav-text">Add Teachers</span>
@@ -121,12 +121,42 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                     <div class="toggle-switch">
                         <span class="switch"></span>
                     </div>
-                </li>
+                </li>   
                 
             </div>
         </div>
-
     </nav>
+
+    <?php
+        // edit_student.php
+        require_once("./components/connection.php");
+
+        if (isset($_GET['student_id'])) {
+            $student_id = $_GET['student_id'];
+
+            $query = "SELECT * FROM students WHERE uid=$student_id"; 
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_num_rows($result) > 0) { 
+                $student_data = mysqli_fetch_assoc($result);
+
+                $symbolnumber = $student_data['symbolnum'];
+                $firstname = $student_data['fname'];
+                $lastname = $student_data['lname'];
+                $email = $student_data['email'];
+                $dob = $student_data['dob'];
+                $phonenumber = $student_data['phone'];
+            } else {
+                header("location:../add_student.php");
+                exit();
+            }
+        } else {
+            header("location:../add_student.php");
+            exit();
+        }
+    ?>
+
+
 
     <section class="home">
         <div class="text">Hello <?php echo ucwords($_SESSION['login_user']) ?>👋</div>
@@ -134,28 +164,27 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
         <?php 
             if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'teacher') {
         ?>
-        <div class="text">
-            <div class="add-student-container">
-                <h2 style="font-size: 25px;">Add Teachers</h2>
-                <form action="./components/add_teachers_data.php" method="POST" class="addstudent">
-                    <label for="teachersid">Teachers ID</label><br>
-                    <input type="number" name="teachersid" placeholder="Teacher's ID" id="teachersid"></input><br>
-                    <label for="subject">Subject</label><br>
-                    <input type="text" name="subject" placeholder="Subject" id="subject"></input><br>
-                    <label for="firstname">Firstname</label><br>
-                    <input type="text" name="firstname" placeholder="Firstname" id="firstname"></input><br>
-                    <label for="lastname">Lastname</label><br>
-                    <input type="text" name="lastname" placeholder="Lastname" id="lastname"></input><br>
-                    <label for="email">Email</label><br>
-                    <input type="email" name="email" placeholder="company@name.com" id="email"></input><br>
-                    <label for="dob">Date of Birth</label><br>
-                    <input type="date" name="dob" placeholder="DOB" id="dob"></input><br>
-                    <label for="phonenumber">Phone Number</label><br>
-                    <input type="number" name="phonenumber" placeholder="Phone Number" id="phonenumber"></input><br><br>
-                    <button type="submit" name="submit">Add Student</button>
-                </form>
+            <div class="text">
+                <div class="add-student-container">
+                    <h2 style="font-size: 25px;">Edit Student</h2>
+                    <form action="./components/edit_student_data.php" method="POST" class="addstudent">
+                        <input type="hidden" name="student_id" value="<?php echo $student_id; ?>">
+                        <label for="symbolnumber">Symbol Number</label><br>
+                        <input type="number" name="symbolnumber" value="<?php echo $symbolnumber; ?>" id="symbolnumber"><br>
+                        <label for="firstname">Firstname</label><br>
+                        <input type="text" name="firstname" value="<?php echo $firstname; ?>" id="firstname"><br>
+                        <label for="lastname">Lastname</label><br>
+                        <input type="text" name="lastname" value="<?php echo $lastname; ?>" id="lastname"><br>
+                        <label for="email">Email</label><br>
+                        <input type="email" name="email" value="<?php echo $email; ?>" id="email"><br>
+                        <label for="dob">Date of Birth</label><br>
+                        <input type="date" name="dob" value="<?php echo $dob; ?>" id="dob"><br>
+                        <label for="phonenumber">Phone Number</label><br>
+                        <input type="number" name="phonenumber" value="<?php echo $phonenumber; ?>" id="phonenumber"><br><br>
+                        <button type="submit" name="submit">Update Student</button>
+                    </form>
+                </div>
             </div>
-        </div>
         <?php 
             } else {
         ?>

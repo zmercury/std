@@ -21,6 +21,5 @@ const body = document.querySelector('body'),
                 modeText.innerText = "Light mode";
             }else{
                 modeText.innerText = "Dark mode";
-
             }
         });

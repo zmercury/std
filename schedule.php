@@ -15,7 +15,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./assets/css/scrollbar.css">
     <link rel="icon" type="image/x-icon" href="./assets/images/planet.png">
-    <title>Add Teacher - SMS</title>
+    <title>Schedule - SMS</title>
     
 </head>
 <body>
@@ -72,14 +72,14 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                         </a>
                     </li>
 
-                    <li class="nav-link selected">
+                    <li class="nav-link">
                         <a href="./add_teacher.php">
                             <i class='bx bx-user-plus icon' ></i>
                             <span class="text nav-text">Add Teachers</span>
                         </a>
                     </li>
 
-                    <li class="nav-link">
+                    <li class="nav-link selected">
                         <a href="./schedule.php">
                             <i class='bx bx-calendar icon' ></i>
                             <span class="text nav-text">Schedule</span>
@@ -131,38 +131,75 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
     <section class="home">
         <div class="text">Hello <?php echo ucwords($_SESSION['login_user']) ?>👋</div>
 
-        <?php 
-            if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'teacher') {
-        ?>
         <div class="text">
-            <div class="add-student-container">
-                <h2 style="font-size: 25px;">Add Teachers</h2>
-                <form action="./components/add_teachers_data.php" method="POST" class="addstudent">
-                    <label for="teachersid">Teachers ID</label><br>
-                    <input type="number" name="teachersid" placeholder="Teacher's ID" id="teachersid"></input><br>
-                    <label for="subject">Subject</label><br>
-                    <input type="text" name="subject" placeholder="Subject" id="subject"></input><br>
-                    <label for="firstname">Firstname</label><br>
-                    <input type="text" name="firstname" placeholder="Firstname" id="firstname"></input><br>
-                    <label for="lastname">Lastname</label><br>
-                    <input type="text" name="lastname" placeholder="Lastname" id="lastname"></input><br>
-                    <label for="email">Email</label><br>
-                    <input type="email" name="email" placeholder="company@name.com" id="email"></input><br>
-                    <label for="dob">Date of Birth</label><br>
-                    <input type="date" name="dob" placeholder="DOB" id="dob"></input><br>
-                    <label for="phonenumber">Phone Number</label><br>
-                    <input type="number" name="phonenumber" placeholder="Phone Number" id="phonenumber"></input><br><br>
-                    <button type="submit" name="submit">Add Student</button>
-                </form>
-            </div>
-        </div>
-        <?php 
-            } else {
+        <h4 style="margin-bottom: 1em;">Class Schedule</h4>
+
+        <?php
+        // Define the schedule data (Day, Teacher Name, Subject, Class Timing)
+        $schedule = array(
+            "Sunday" => array(
+                array("John Doe", "Mathematics", "9:00 AM - 10:30 AM"),
+                array("Jane Smith", "Science", "10:45 AM - 12:15 PM"),
+                array("Michael Johnson", "English", "1:00 PM - 2:30 PM"),
+                array("Emily Brown", "History", "3:00 PM - 4:30 PM")
+            ),
+            "Monday" => array(
+                array("Robert Williams", "Geography", "9:00 AM - 10:30 AM"),
+                array("Sarah Lee", "Physical Ed.", "10:45 AM - 12:15 PM"),
+                array("David Miller", "Physics", "1:00 PM - 2:30 PM"),
+                array("Karen Davis", "Chemistry", "3:00 PM - 4:30 PM")
+            ),
+            "Tuesday" => array(
+                array("Steven Wilson", "Biology", "9:00 AM - 10:30 AM"),
+                array("Laura White", "Computer Science", "10:45 AM - 12:15 PM"),
+                array("Mark Taylor", "Art", "1:00 PM - 2:30 PM"),
+                array("Jennifer Green", "Music", "3:00 PM - 4:30 PM")
+            ),
+            "Wednesday" => array(
+                array("John Doe", "Mathematics", "9:00 AM - 10:30 AM"),
+                array("Jane Smith", "Science", "10:45 AM - 12:15 PM"),
+                array("Michael Johnson", "English", "1:00 PM - 2:30 PM"),
+                array("Emily Brown", "History", "3:00 PM - 4:30 PM"),
+                array("Robert Williams", "Geography", "5:00 PM - 6:30 PM")
+            ),
+            "Thursday" => array(
+                array("Sarah Lee", "Physical Ed.", "9:00 AM - 10:30 AM"),
+                array("David Miller", "Physics", "10:45 AM - 12:15 PM"),
+                array("Karen Davis", "Chemistry", "1:00 PM - 2:30 PM"),
+                array("Steven Wilson", "Biology", "3:00 PM - 4:30 PM"),
+                array("Laura White", "Computer Science", "5:00 PM - 6:30 PM")
+            ),
+            "Friday" => array(
+                array("Mark Taylor", "Art", "9:00 AM - 10:30 AM"),
+                array("Jennifer Green", "Music", "10:45 AM - 12:15 PM"),
+                array("John Doe", "Mathematics", "1:00 PM - 2:30 PM"),
+                array("Jane Smith", "Science", "3:00 PM - 4:30 PM"),
+                array("Michael Johnson", "English", "5:00 PM - 6:30 PM")
+            )
+        );
+
+        // Display the schedule in an HTML table
+        echo "<table border='1' class='fetched-table'>";
+        echo "<tr><th>Day</th><th>Teacher Name</th><th>Subject</th><th>Class Timing</th></tr>";
+
+        foreach ($schedule as $day => $classes) {
+            echo "<tr><td rowspan='" . count($classes) . "'>" . $day . "</td>";
+            $first = true;
+            foreach ($classes as $class) {
+                if (!$first) {
+                    echo "<tr>";
+                }
+                echo "<td>" . $class[0] . "</td>"; // Teacher Name
+                echo "<td>" . $class[1] . "</td>"; // Subject
+                echo "<td>" . $class[2] . "</td>"; // Class Timing
+                echo "</tr>";
+                $first = false;
+            }
+        }
+
+        echo "</table>";
         ?>
-        <div class="text">
-            <span id="permission-text">⛔ Only Admin and Teacher can access this page!</span>
         </div>
-        <?php } ?>
 
     </section>
 

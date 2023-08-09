@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="./assets/css/main.css">
     <script src="./assets/scripts/main.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
-    <title>Home - SMS</title>
+    <link rel="stylesheet" href="./assets/css/scrollbar.css">
+    <title>Sign Up - SMS</title>
 </head>
 <body>
     <nav class="navContainer">
@@ -20,7 +21,7 @@
             <a href="./faq.php">FAQ's</a>
         </div>
     </nav>
-    <main class="mainContainer">
+    <main class="mainContainer" style="margin-bottom: 6em;">
         <div class="innerMainContainer">
             <div class="innerLeft">
                 <div class="leftInnerContainer">
@@ -35,6 +36,10 @@
                             <option value="teacher">Teacher</option>
                             <option value="admin">Admin</option>
                         </select><br>
+                        <label for="firstname">Firstname</label><br>
+                        <input type="text" name="firstname" placeholder="Firstname" id="firstname"></input><br>
+                        <label for="lastname">Lastname</label><br>
+                        <input type="text" name="lastname" placeholder="Lastname" id="lastname"></input><br>
                         <label for="username">Username</label><br>
                         <input type="text" name="username" placeholder="Username" id="username"></input><br>
                         <label for="email">Email</label><br>
@@ -44,13 +49,6 @@
                         <button type="submit" name="submit">Sign Up</button>
                     </form>
                     <span>Already have an account?<a href="./index.php"> Login now</a></span>
-                </div>
-            </div>
-            <div class="innerRight">
-                <div class="innerMainContainer">
-                    <div class="leftInnerContainer">
-                        <!-- <img src="./assets/images/login.jpg" alt="" style="border-radius: 7px; height: 100%;"> -->
-                    </div>
                 </div>
             </div>
         </div>

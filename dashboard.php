@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
-    if ((time() - $_SESSION['last_login_timestamp']) > 120) {
-        header("location:../index.php");
+    if ((time() - $_SESSION['last_login_timestamp']) > 12000) {
+        header("location:index.php");
     } else {
 ?>
 <!DOCTYPE html>
@@ -13,6 +13,9 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/dashboard.css">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./assets/css/scrollbar.css">
+    <link rel="icon" type="image/x-icon" href="./assets/images/planet.png">
+    <title>Dashboard - SMS</title>
     
 </head>
 <body>
@@ -77,9 +80,23 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                     </li>
 
                     <li class="nav-link">
-                        <a href="./attendance.php">
+                        <a href="./schedule.php">
+                            <i class='bx bx-calendar icon' ></i>
+                            <span class="text nav-text">Schedule</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="./assignment.php">
                             <i class='bx bx-book-content icon' ></i>
-                            <span class="text nav-text">Attendance</span>
+                            <span class="text nav-text">Assignment</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="./add_notice.php">
+                            <i class='bx bx-notification icon'></i>
+                            <span class="text nav-text">Notice</span>
                         </a>
                     </li>
 
@@ -108,11 +125,218 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                 
             </div>
         </div>
-
     </nav>
 
+    <?php
+            $conn = new mysqli('localhost', 'root', '', 'sms');
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $sql = "SELECT * FROM notice";
+            $result = $conn->query($sql);
+
+            $notices = array(); 
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $notices[] = $row; 
+                }
+            }
+
+            rsort($notices);
+
+            $importantNotice = null;
+
+            foreach($notices as $notice) {
+                if($notice['status'] === 'important') {
+                    $importantNotice = $notice;
+                    break;
+                } else {
+                    $importantNotice = "There is no Important Notices for today!";
+                }
+            }
+
+            $str = implode(",", $importantNotice);
+
+            $conn->close();
+        ?>
+
     <section class="home">
-        <div class="text">Hello <?php echo ucwords($_SESSION['login_user']) ?>👋!</div>
+        <div class="text">Hello <?php echo ucwords($_SESSION['login_user']) ?>👋</div>
+
+        <div class="text">
+            <div class="home-top">
+                <div class="home-notice">
+                    <div class="home-notice-left">
+                        
+                    
+                        <h4>Notice</h4>
+                        <span class="date" style="font-weight: 700;">Last Updated: <?php echo date("d M Y h:s a", strtotime($notice['notice-date'])) ?></span>
+                        <p> <?php echo $notice['notice-data'] ?> </p>
+                        
+                        <?php if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'teacher') { ?>
+                        <div id="quick-actions" style="margin-top: .5em !important; width: fit-content;">
+                                <i class='bx bx-plus'></i>
+                                <a href="./add_notice.php"><span>Add Notice</span></a>
+                        </div>
+                        <?php } ?>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text">
+            <div class="home-top">
+                <div class="home-notice">
+                    <div class="home-notice-left">
+                        <h4>Quick Actions</h4>
+                        <div class="home-notice-left-quick-actions">
+                            <?php if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'teacher') { ?>
+                            <div id="quick-actions">
+                                <i class='bx bx-plus'></i>
+                                <a href="./add_student.php"><span>Add Students</span></a>
+                            </div>
+                            <?php } ?>
+                            <div id="quick-actions">
+                                <i class='bx bx-note'></i>
+                                <a href="./student.php"><span>Students Record</span></a>
+                            </div>
+                            <?php if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'teacher') { ?>
+                            <div id="quick-actions">
+                                <i class='bx bx-plus'></i>
+                                <a href="./add_teacher.php"><span>Add Teachers</span></a>
+                            </div>
+                            <?php } ?>
+                            <div id="quick-actions">
+                                <i class='bx bx-note'></i>
+                                <a href="./teacher.php"><span>Teachers Record</span></a>
+                            </div>
+                            <div id="quick-actions">
+                                <i class='bx bx-calendar' ></i>
+                                <a href="./schedule.php"><span>Schedule</span></a>
+                            </div>
+                            <div id="quick-actions">
+                                <i class='bx bx-book-bookmark' ></i>
+                                <a href="./assignment.php"><span>Assignments</span></a>
+                            </div>
+                            <div id="quick-actions">
+                                <i class='bx bx-notification icon'></i>
+                                <a href="./add_notice.php"><span>Notice</span></a>
+                            </div>
+                            <div id="quick-actions">
+                                <i class='bx bx-question-mark icon'></i>
+                                <a href="./faq_inner.php"><span>FAQ</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+
+        <?php
+        $conn = new mysqli('localhost', 'root', '', 'sms');
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        
+        $sql = "SELECT * FROM students";
+        $result = $conn->query($sql);
+        
+        $students = 0; 
+        
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $students = $students + 1;
+            }
+        }
+        
+        $conn->close();
+    ?>
+
+    <?php
+        $conn = new mysqli('localhost', 'root', '', 'sms');
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        
+        $sql = "SELECT * FROM teachers";
+        $result = $conn->query($sql);
+        
+        $teachers = 0; 
+        
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $teachers = $teachers + 1;
+            }
+        }
+        
+        $conn->close();
+    ?>
+
+    <?php
+        $conn = new mysqli('localhost', 'root', '', 'sms');
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        
+        $sql = "SELECT * FROM assignment";
+        $result = $conn->query($sql);
+        
+        $assignments = array(); 
+        
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $assignments[] = $row; 
+            }
+        }
+
+        rsort($assignments);
+
+        $conn->close();
+    ?>
+
+
+        <div class="text">
+            <div class="parent">
+                    <div class="home-top">
+                        <div class="home-notice">
+                            <div class="home-notice-left">
+                                <div class="home-notice-left-inner" style="display: flex; justify-content:space-between; align-items:center; flex-wrap: wrap; ">
+                                    <h4 style="margin-bottom: .6em;">Today's Assignment</h4> 
+                                    <span class="assignment-date" style="font-weight: 800; font-size: 13px;"><?php echo date('d M Y'); ?></span>
+                                </div>
+                                <?php if (!empty($assignments)) : ?>
+                                <div class="inner-fetched-assignment">
+                                    <?php    
+                                        foreach ($assignments as $assignment) : 
+                                    ?>                               
+                                        <h4 style="font-size: 13px !important;">🕑 Added at:  <?php echo date("d M Y", strtotime($assignment['curtime'])); ?>  -  <span style="color: #ade8f4"><?php echo $assignment['addedby']; ?></span></h4> 
+                                        <h4 style="margin-left: 2em;  font-weight: 500;">  <?php echo $assignment['assignment']; ?></h4>
+                                        <h4 style="margin-left: 2.4em; font-size: 11px !important; font-weight: 500; margin-bottom: .5em; color:#C0DFA1;"> ⛔   Submission Date:  <?php echo date("d M Y", strtotime($assignment['submissiondate'])); ?></h4> 
+                                    <?php
+                                        endforeach; 
+                                    ?>
+                                </div>
+                                <?php else : ?>
+                                    <p>No Assignement found</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="home-notice-left">
+                        <h4>Total Students</h4>
+                        <span class="count-entity"> <?php echo $students ?></span>
+                    </div>
+                    <div class="home-notice-left">
+                        <h4>Total Teachers</h4>
+                        <span class="count-entity"> <?php echo $teachers ?></span>
+                    </div>
+            </div>
+        </div>
+
     </section>
 
     <script src="./assets/scripts/dashboard.js"></script>
@@ -120,8 +344,8 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
 </body>
 </html>
 <?php
-    }
+}
 } else {
-    header("location:../index.php");
+    header("location:index.php");
 }
 ?>

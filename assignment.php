@@ -15,7 +15,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./assets/css/scrollbar.css">
     <link rel="icon" type="image/x-icon" href="./assets/images/planet.png">
-    <title>Add Teacher - SMS</title>
+    <title>Assignments - SMS</title>
     
 </head>
 <body>
@@ -72,7 +72,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                         </a>
                     </li>
 
-                    <li class="nav-link selected">
+                    <li class="nav-link">
                         <a href="./add_teacher.php">
                             <i class='bx bx-user-plus icon' ></i>
                             <span class="text nav-text">Add Teachers</span>
@@ -86,7 +86,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                         </a>
                     </li>
 
-                    <li class="nav-link">
+                    <li class="nav-link selected">
                         <a href="./assignment.php">
                             <i class='bx bx-book-content icon' ></i>
                             <span class="text nav-text">Assignment</span>
@@ -125,45 +125,89 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                 
             </div>
         </div>
-
     </nav>
+
+    
 
     <section class="home">
         <div class="text">Hello <?php echo ucwords($_SESSION['login_user']) ?>👋</div>
 
-        <?php 
+        <?php
             if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'teacher') {
         ?>
+
         <div class="text">
-            <div class="add-student-container">
-                <h2 style="font-size: 25px;">Add Teachers</h2>
-                <form action="./components/add_teachers_data.php" method="POST" class="addstudent">
-                    <label for="teachersid">Teachers ID</label><br>
-                    <input type="number" name="teachersid" placeholder="Teacher's ID" id="teachersid"></input><br>
-                    <label for="subject">Subject</label><br>
-                    <input type="text" name="subject" placeholder="Subject" id="subject"></input><br>
-                    <label for="firstname">Firstname</label><br>
-                    <input type="text" name="firstname" placeholder="Firstname" id="firstname"></input><br>
-                    <label for="lastname">Lastname</label><br>
-                    <input type="text" name="lastname" placeholder="Lastname" id="lastname"></input><br>
-                    <label for="email">Email</label><br>
-                    <input type="email" name="email" placeholder="company@name.com" id="email"></input><br>
-                    <label for="dob">Date of Birth</label><br>
-                    <input type="date" name="dob" placeholder="DOB" id="dob"></input><br>
-                    <label for="phonenumber">Phone Number</label><br>
-                    <input type="number" name="phonenumber" placeholder="Phone Number" id="phonenumber"></input><br><br>
-                    <button type="submit" name="submit">Add Student</button>
-                </form>
+            <div class="home-top">
+                <div class="home-notice">
+                    <div class="home-notice-left">
+                        <h4>Add Assignment</h4>
+                        <form action="./components/add_assignment.php" class="addstudent" method="POST" >
+                            <input type="hidden" name="session_user" value="<?php echo $_SESSION['login_user']; ?>">
+                            <input type="text" name="questions" id="questions" placeholder="Add your questions here" style="height: 4em !important">
+                            <label for="deadline">Submission Date</label>
+                            <input 
+                                type="datetime-local"
+                                id="deadline"
+                                name="deadline"
+                                value="2023-01-01T00:00"
+                                min="2023-01-01T00:00"
+                                max="2024-12-15T00:00"
+                            />  
+                            <button type="submit" name="submit">Add </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-        <?php 
-            } else {
-        ?>
-        <div class="text">
-            <span id="permission-text">⛔ Only Admin and Teacher can access this page!</span>
-        </div>
-        <?php } ?>
 
+        <?php 
+            } 
+        ?>
+
+        <?php
+            $conn = new mysqli('localhost', 'root', '', 'sms');
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $sql = "SELECT * FROM assignment";
+            $result = $conn->query($sql);
+
+            $assignments = array(); 
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $assignments[] = $row; 
+                }
+            }
+
+            rsort($assignments);
+
+            $conn->close();
+        ?>
+        
+        <div class="text" >
+            <div class="home-top" style="margin-bottom: 2em;">
+                <div class="home-notice">
+                    <div class="home-notice-left">
+                        <h4 style="margin-bottom: 1em;">Recent Assignments</h4>
+                        <?php if (!empty($assignments)) : ?>
+                        <div class="inner-fetched-assignment">
+                            <?php foreach ($assignments as $assignment) : ?>
+                                <h4 style="font-size: 13px !important;">🕑 Added at:  <?php echo date("d M Y h:i a", strtotime($assignment['curtime'])); ?>  -  <span style="color: #ade8f4"><?php echo $assignment['addedby']; ?></span></h4> 
+                                <h4 style="font-size: 13px !important;">⏳ Submission Date:  <?php echo date("d M Y h:i a", strtotime($assignment['submissiondate'])); ?></h4> 
+                                <h4 style="margin-left: 2em; margin-bottom: 2em; font-weight: 500;">  <?php echo $assignment['assignment']; ?></h4>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php else : ?>
+                            <p>No Assignement found</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            
     </section>
 
     <script src="./assets/scripts/dashboard.js"></script>

@@ -15,7 +15,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./assets/css/scrollbar.css">
     <link rel="icon" type="image/x-icon" href="./assets/images/planet.png">
-    <title>Add Teacher - SMS</title>
+    <title>Add Notice - SMS</title>
     
 </head>
 <body>
@@ -72,7 +72,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                         </a>
                     </li>
 
-                    <li class="nav-link selected">
+                    <li class="nav-link">
                         <a href="./add_teacher.php">
                             <i class='bx bx-user-plus icon' ></i>
                             <span class="text nav-text">Add Teachers</span>
@@ -93,7 +93,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                         </a>
                     </li>
 
-                    <li class="nav-link">
+                    <li class="nav-link selected">
                         <a href="./add_notice.php">
                             <i class='bx bx-notification icon'></i>
                             <span class="text nav-text">Notice</span>
@@ -121,7 +121,7 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
                     <div class="toggle-switch">
                         <span class="switch"></span>
                     </div>
-                </li>
+                </li>   
                 
             </div>
         </div>
@@ -135,34 +135,75 @@ if (isset($_SESSION['login_user']) && isset($_SESSION['role'])) {
             if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'teacher') {
         ?>
         <div class="text">
-            <div class="add-student-container">
-                <h2 style="font-size: 25px;">Add Teachers</h2>
-                <form action="./components/add_teachers_data.php" method="POST" class="addstudent">
-                    <label for="teachersid">Teachers ID</label><br>
-                    <input type="number" name="teachersid" placeholder="Teacher's ID" id="teachersid"></input><br>
-                    <label for="subject">Subject</label><br>
-                    <input type="text" name="subject" placeholder="Subject" id="subject"></input><br>
-                    <label for="firstname">Firstname</label><br>
-                    <input type="text" name="firstname" placeholder="Firstname" id="firstname"></input><br>
-                    <label for="lastname">Lastname</label><br>
-                    <input type="text" name="lastname" placeholder="Lastname" id="lastname"></input><br>
-                    <label for="email">Email</label><br>
-                    <input type="email" name="email" placeholder="company@name.com" id="email"></input><br>
-                    <label for="dob">Date of Birth</label><br>
-                    <input type="date" name="dob" placeholder="DOB" id="dob"></input><br>
-                    <label for="phonenumber">Phone Number</label><br>
-                    <input type="number" name="phonenumber" placeholder="Phone Number" id="phonenumber"></input><br><br>
-                    <button type="submit" name="submit">Add Student</button>
-                </form>
+            <div class="home-notice-left">
+                <div class="add-student-container">
+                    <h2 style="font-size: 25px;">Add Notice</h2>
+                    <form action="./components/add_notice_data.php" method="POST" class="addstudent">
+                        <input type="text" name="notice-content" placeholder="Notice Content goes here" id="notice-content"  style="height: 6em; margin-bottom: 0px;"></input><br>
+                        <select name="status" id="status" style="margin-top: 0;" class="select">
+                            <option value="">Choose your status</option>
+                            <option value="important">Important - Front Page</option>
+                            <option value="basic">Basic</option>
+                        </select>
+                        <button type="submit" name="submit" style="margin-top: .6em;">Add  Notice</button>
+                    </form>
+                </div>
             </div>
         </div>
         <?php 
-            } else {
+            } 
         ?>
-        <div class="text">
-            <span id="permission-text">⛔ Only Admin and Teacher can access this page!</span>
+
+        <?php
+            $conn = new mysqli('localhost', 'root', '', 'sms');
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $sql = "SELECT * FROM notice";
+            $result = $conn->query($sql);
+
+            $notices = array(); 
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $notices[] = $row; 
+                }
+            }
+
+            rsort($notices);
+
+            $conn->close();
+        ?>
+        
+        <div class="text" >
+            <div class="home-top" style="margin-bottom: 2em;">
+                <div class="home-notice">
+                    <div class="home-notice-left">
+                        <h4 style="margin-bottom: 1em;">Recent Notice</h4>
+                        <?php if (!empty($notices)) : ?>
+                        <div class="inner-fetched-assignment">
+                            <?php foreach ($notices as $notice) : ?>
+                                <h4 style="font-size: 13px !important;">🕑 Added at:  <?php echo date("d M Y h:i a", strtotime($notice['notice-date'])); ?> 
+
+                                <?php 
+                                    if ($notice['status'] === 'important') {
+                                ?>
+                                    - <span style="color: #e63946;;"> ⚠️<?php echo ucfirst($notice['status']) ?> </span>
+                                <?php 
+                                    } 
+                                ?>
+
+                                <h4 style="margin-left: 2em; margin-bottom: 2em; font-weight: 500;">  <?php echo $notice['notice-data']; ?></h4>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php else : ?>
+                            <p>No Notice found</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
         </div>
-        <?php } ?>
 
     </section>
 
